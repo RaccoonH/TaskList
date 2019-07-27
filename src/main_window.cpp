@@ -6,8 +6,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     setMinimumSize(900,600);
 
-    TaskMenu *taskW = new TaskMenu(this);
-    setCentralWidget(taskW);
+    TaskMenu *taskMenu = new TaskMenu(this);
+    setCentralWidget(taskMenu);
 
 
 }

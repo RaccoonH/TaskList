@@ -57,10 +57,20 @@ QWidget* TaskMenu::createTaskInfoMenu()
     QLineEdit *nameLineEdit = new QLineEdit(taskInfoWidget);
     taskInfoLayout->addWidget(nameLineEdit);
 
-    //taskInfoMenu test delete later
-    QLabel *label = new QLabel(this);
-    label->setText("zhopa");
-    taskInfoLayout->addWidget(label);
+    QTextEdit *descriptionTextEdit = new QTextEdit(taskInfoWidget);
+    taskInfoLayout->addWidget(descriptionTextEdit);
+
+    QLabel *leadTimeLabel = new QLabel("Время выполнения: test",taskInfoWidget);
+    taskInfoLayout->addWidget(leadTimeLabel);
+
+    QLabel *statusLabel = new QLabel("Статус: test", taskInfoWidget);
+    taskInfoLayout->addWidget(statusLabel);
+
+    QPushButton *performTaskButton = new QPushButton("Выполнить задачу", taskInfoWidget);
+    taskInfoLayout->addWidget(performTaskButton);
+
+    QPushButton *deleteTaskButton = new QPushButton("Удалить задачу", taskInfoWidget);
+    taskInfoLayout->addWidget(deleteTaskButton);
 
     return taskInfoWidget;
 }
