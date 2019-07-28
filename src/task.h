@@ -7,6 +7,7 @@ class Task
 {
 public:
     Task();
+    Task(QString, QString, int, int);
 
 private:
     QString _name;
@@ -15,7 +16,7 @@ private:
     int _priority;
     bool _status;
 
-private:
+public:
     QString getName();
     void setName(QString name);
     QString getDescription();

@@ -1,23 +1,25 @@
 #include "task_widget.h"
 
-TaskWidget::TaskWidget(QWidget *parent) : QLabel(parent)
+TaskWidget::TaskWidget(Task task, TaskMenu *parent) : QLabel(parent)
 {
-    setText("task");
+    _task = task;
+    setText(task.getName());
     setMinimumSize(200,100);
     setMaximumSize(200,100);
     setFrameShape(QFrame::Box);
 
-    connect(this,SIGNAL(clicked()),this,SLOT(onTaskWidgetClicked()));
+    connect(this, &TaskWidget::clicked, parent, &TaskMenu::displayTaskInfo);
 }
 
+//color change not working yet
 void TaskWidget::onTaskWidgetClicked()
 {
-    pall.setColor(QPalette::Window,Qt::gray);
-    setPalette(pall);
+    _pall.setColor(QPalette::Window,Qt::gray);
+    setPalette(_pall);
     setAutoFillBackground(true);
 }
 
 void TaskWidget::mousePressEvent(QMouseEvent* event)
 {
-    emit clicked();
+    emit clicked(_task);
 }

@@ -3,7 +3,12 @@
 
 #include <QWidget>
 #include <QLayout>
+#include <QPushButton>
 #include <QScrollArea>
+#include <QTextEdit>
+#include <QLineEdit>
+#include <QLabel>
+#include "task.h"
 
 class TaskMenu : public QWidget
 {
@@ -14,11 +19,13 @@ public:
 
 private:
     QGridLayout *_taskMenuLayout;
-//    QVBoxLayout *_taskListLayout;
-//    QWidget *_taskListWidget;
-//    QVBoxLayout *_taskInfoLayout;
-//    QWidget *_taskInfoWidget;
-//    QScrollArea *_scrollArea;
+    QPushButton *_addNewTaskButton;
+    QVBoxLayout *_taskListLayout;
+
+    QLineEdit *_nameLineEdit;
+    QTextEdit *_descriptionTextEdit;
+    QLabel *_leadTimeLabel;
+    QLabel *_statusLabel;
 
 private:
     QScrollArea* createTaskList();
@@ -27,6 +34,11 @@ private:
 signals:
 
 public slots:
+    //void onTaskWidgetClicked(Task task);
+    void onNewTaskButtonClicked();
+    void displayTaskInfo(Task task);
+    void onNewTaskCreated(Task);
+    void onDeleteTaskClicked();
 };
 
 #endif // TASK_MENU_H

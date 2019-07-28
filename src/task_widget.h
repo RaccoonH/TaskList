@@ -2,21 +2,23 @@
 #define TASK_WIDGET_H
 
 #include <QLabel>
+#include "task_menu.h"
 
 class TaskWidget : public QLabel
 {
     Q_OBJECT
 public:
-    explicit TaskWidget(QWidget *parent = nullptr);
+    explicit TaskWidget(Task task,TaskMenu *parent = nullptr);
 
 private:
-    QPalette pall;
+    QPalette _pall;
+    Task _task;
 
 private slots:
     void onTaskWidgetClicked();
 
 signals:
-    void clicked();
+    void clicked(Task);
 
 protected:
     void mousePressEvent(QMouseEvent* event);

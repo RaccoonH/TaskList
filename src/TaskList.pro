@@ -27,12 +27,14 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         main_window.cpp \
+        new_task_window.cpp \
         task.cpp \
         task_menu.cpp \
         task_widget.cpp
 
 HEADERS += \
         main_window.h \
+        new_task_window.h \
         task.h \
         task_menu.h \
         task_widget.h
