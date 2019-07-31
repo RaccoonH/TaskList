@@ -36,7 +36,7 @@ NewTaskWindow::NewTaskWindow(TaskMenu *parent) : QDialog(parent)
     layout->addWidget(applyButton,5,1);
     layout->addWidget(cancelButton,5,2);
 
-    connect(this, &NewTaskWindow::newTaskCreated, parent, &TaskMenu::onNewTaskCreated);
+    connect(this, &NewTaskWindow::newTaskCreated, parent, &TaskMenu::updateTaskList);
 }
 
 void NewTaskWindow::onApplyClicked()
@@ -48,7 +48,10 @@ void NewTaskWindow::onApplyClicked()
     task.setPriority(_priorityNum->value());
     task.setStatus(false);
 
-    emit newTaskCreated(task);
+    //database new task
+    DataBaseConnector::dataBase()->addNewTask(task);
+
+    emit newTaskCreated();
 
     this->close();
 }

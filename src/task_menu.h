@@ -9,6 +9,7 @@
 #include <QLineEdit>
 #include <QLabel>
 #include "task.h"
+#include "database_connector.h"
 
 class TaskMenu : public QWidget
 {
@@ -27,6 +28,8 @@ private:
     QLabel *_leadTimeLabel;
     QLabel *_statusLabel;
 
+    int _idOfCurrentTask;
+
 private:
     QScrollArea* createTaskList();
     QWidget* createTaskInfoMenu();
@@ -34,11 +37,12 @@ private:
 signals:
 
 public slots:
-    //void onTaskWidgetClicked(Task task);
     void onNewTaskButtonClicked();
     void displayTaskInfo(Task task);
-    void onNewTaskCreated(Task);
+    void onNewTaskCreated();
+    void onCompleteTaskClicked();
     void onDeleteTaskClicked();
+    void updateTaskList();
 };
 
 #endif // TASK_MENU_H

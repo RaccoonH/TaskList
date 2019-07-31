@@ -7,9 +7,10 @@ class Task
 {
 public:
     Task();
-    Task(QString, QString, int, int);
+    Task(int, QString, QString, int, int);
 
 private:
+    int _id;
     QString _name;
     QString _description;
     int _leadTime;
@@ -27,6 +28,8 @@ public:
     void setPriority(int priority);
     bool isDone();
     void setStatus(bool status);
+    int getId();
+    void setId(int);
 };
 
 #endif // TASK_H

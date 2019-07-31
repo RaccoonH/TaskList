@@ -18,7 +18,7 @@ private slots:
     void onTaskWidgetClicked();
 
 signals:
-    void clicked(Task);
+    void clicked(Task task);
 
 protected:
     void mousePressEvent(QMouseEvent* event);

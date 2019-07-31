@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -25,6 +25,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+        database_connector.cpp \
         main.cpp \
         main_window.cpp \
         new_task_window.cpp \
@@ -33,6 +34,7 @@ SOURCES += \
         task_widget.cpp
 
 HEADERS += \
+        database_connector.h \
         main_window.h \
         new_task_window.h \
         task.h \

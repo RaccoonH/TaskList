@@ -22,7 +22,7 @@ private:
     QSpinBox *_priorityNum;
 
 signals:
-    void newTaskCreated(Task);
+    void newTaskCreated();
 
 public slots:
     void onApplyClicked();

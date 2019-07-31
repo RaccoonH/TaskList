@@ -5,8 +5,9 @@ Task::Task()
 
 }
 
-Task::Task(QString name, QString description, int leadTime, int priority)
+Task::Task(int id, QString name, QString description, int leadTime, int priority)
 {
+    _id = id;
     _name = name;
     _description = description;
     _leadTime = leadTime;
@@ -62,4 +63,14 @@ int Task::getPriority()
 bool Task::isDone()
 {
     return _status;
+}
+
+int Task::getId()
+{
+    return _id;
+}
+
+void Task::setId(int id)
+{
+    _id = id;
 }

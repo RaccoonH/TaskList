@@ -8,6 +8,12 @@ TaskWidget::TaskWidget(Task task, TaskMenu *parent) : QLabel(parent)
     setMaximumSize(200,100);
     setFrameShape(QFrame::Box);
 
+    if(task.isDone())
+    {
+        _pall.setColor(QPalette::Window,Qt::green);
+        setPalette(_pall);
+        setAutoFillBackground(true);
+    }
     connect(this, &TaskWidget::clicked, parent, &TaskMenu::displayTaskInfo);
 }
 

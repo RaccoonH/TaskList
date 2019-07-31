@@ -22,6 +22,8 @@ TaskMenu::TaskMenu(QWidget *parent) : QWidget(parent)
 
 QScrollArea* TaskMenu::createTaskList()
 {
+    DataBaseConnector::init();
+
     QScrollArea *scrollArea = new QScrollArea(this);
     QWidget *taskListWidget = new QWidget(scrollArea);
     _taskListLayout = new QVBoxLayout(taskListWidget);
@@ -39,10 +41,14 @@ QScrollArea* TaskMenu::createTaskList()
 
     scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    //test code delete later
-    Task task("test", "description", 30, 5);
-    TaskWidget *taskWidget = new TaskWidget(task, this);
-    _taskListLayout->addWidget(taskWidget);
+    QVector<Task> taskList;
+    taskList = DataBaseConnector::dataBase()->getTaskList();
+    for(int i = 0; i < taskList.size(); ++i)
+    {
+        Task task = taskList[i];
+        TaskWidget *taskWidget = new TaskWidget(task, this);
+        _taskListLayout->addWidget(taskWidget);
+    }
 
     return scrollArea;
 }
@@ -68,17 +74,21 @@ QWidget* TaskMenu::createTaskInfoMenu()
     taskInfoLayout->addWidget(_statusLabel);
 
     //this button must be perform and performAgain if task is already done
-    QPushButton *performTaskButton = new QPushButton("Выполнить задачу", taskInfoWidget);
-    taskInfoLayout->addWidget(performTaskButton);
+    QPushButton *completeTaskButton = new QPushButton("Выполнить задачу", taskInfoWidget);
+    taskInfoLayout->addWidget(completeTaskButton);
+    connect(completeTaskButton, &QPushButton::clicked, this, &TaskMenu::onCompleteTaskClicked);
+
 
     QPushButton *deleteTaskButton = new QPushButton("Удалить задачу", taskInfoWidget);
     taskInfoLayout->addWidget(deleteTaskButton);
+    connect(deleteTaskButton, &QPushButton::clicked, this, &TaskMenu::onDeleteTaskClicked);
 
     return taskInfoWidget;
 }
 
 void TaskMenu::displayTaskInfo(Task task)
 {
+    _idOfCurrentTask = task.getId();
     _nameLineEdit->setText(task.getName());
     _descriptionTextEdit->setText(task.getDescription());
     _leadTimeLabel->setText("Время выполнения: " + QString::number(task.getLeadTime()));
@@ -92,15 +102,49 @@ void TaskMenu::displayTaskInfo(Task task)
     }
 }
 
-void TaskMenu::onNewTaskCreated(Task task)
+void TaskMenu::onNewTaskCreated()
 {
-    TaskWidget *taskWidget = new TaskWidget(task, this);
-    _taskListLayout->addWidget(taskWidget);
+    QVector<Task> taskList;
+    taskList = DataBaseConnector::dataBase()->getTaskList();
+    for(int i = 0; i < taskList.size(); ++i)
+    {
+        Task task = taskList[i];
+        TaskWidget *taskWidget = new TaskWidget(task, this);
+        _taskListLayout->addWidget(taskWidget);
+    }
+
+
+}
+
+void TaskMenu::updateTaskList()
+{
+    QLayoutItem *child;
+
+    while ((child = _taskListLayout->takeAt(0)) != 0)
+    {
+        delete child->widget();
+        delete child;
+    }
+    QVector<Task> taskList;
+    taskList = DataBaseConnector::dataBase()->getTaskList();
+    for(int i = 0; i < taskList.size(); ++i)
+    {
+        Task task = taskList[i];
+        TaskWidget *taskWidget = new TaskWidget(task, this);
+        _taskListLayout->addWidget(taskWidget);
+    }
+}
+
+void TaskMenu::onCompleteTaskClicked()
+{
+    DataBaseConnector::dataBase()->completeTask(_idOfCurrentTask);
+    updateTaskList();
 }
 
 void TaskMenu::onDeleteTaskClicked()
 {
-
+    DataBaseConnector::dataBase()->deleteTask(_idOfCurrentTask);
+    updateTaskList();
 }
 
 void TaskMenu::onNewTaskButtonClicked()
@@ -111,5 +155,5 @@ void TaskMenu::onNewTaskButtonClicked()
 
 TaskMenu::~TaskMenu()
 {
-
+    DataBaseConnector::deinit();
 }
