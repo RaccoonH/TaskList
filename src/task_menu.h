@@ -27,6 +27,9 @@ private:
     QTextEdit *_descriptionTextEdit;
     QLabel *_leadTimeLabel;
     QLabel *_statusLabel;
+    QPushButton *_completeTaskButton;
+
+    void updateTaskInfoMenu();
 
     int _idOfCurrentTask;
 
@@ -43,6 +46,7 @@ public slots:
     void onCompleteTaskClicked();
     void onDeleteTaskClicked();
     void updateTaskList();
+    void onApplyChangesClicked();
 };
 
 #endif // TASK_MENU_H

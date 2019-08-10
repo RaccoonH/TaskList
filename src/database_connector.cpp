@@ -78,11 +78,29 @@ void DataBaseConnector::completeTask(int id)
     query.exec();
 }
 
+void DataBaseConnector::completeTaskAgain(int id)
+{
+    QSqlQuery query;
+    query.prepare("UPDATE TaskList_Table set status = '0' WHERE id = :id");
+    query.bindValue(":id", id);
+    query.exec();
+}
+
 void DataBaseConnector::deleteTask(int id)
 {
     QSqlQuery query;
     query.prepare("DELETE FROM TaskList_Table WHERE id = :id");
     query.bindValue(":id", id);
+    query.exec();
+}
+
+void DataBaseConnector::changeTask(int id, QString name, QString desc)
+{
+    QSqlQuery query;
+    query.prepare("UPDATE TaskList_Table SET name = :name, description = :desc WHERE id = :id");
+    query.bindValue(":id", id);
+    query.bindValue(":name", name);
+    query.bindValue(":desc", desc);
     query.exec();
 }
 

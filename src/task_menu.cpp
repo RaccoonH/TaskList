@@ -62,22 +62,26 @@ QWidget* TaskMenu::createTaskInfoMenu()
     taskInfoLayout->setMargin(0);
 
     _nameLineEdit = new QLineEdit(taskInfoWidget);
+    _nameLineEdit->setText("Добро пожаловать в TaskList");
     taskInfoLayout->addWidget(_nameLineEdit);
 
     _descriptionTextEdit = new QTextEdit(taskInfoWidget);
+    _descriptionTextEdit->setText("Нажмите на задачу из списка задач в левой части окна, или создайте новую задачу.");
     taskInfoLayout->addWidget(_descriptionTextEdit);
 
-    _leadTimeLabel = new QLabel("Время выполнения: test",taskInfoWidget);
+    _leadTimeLabel = new QLabel("",taskInfoWidget);
     taskInfoLayout->addWidget(_leadTimeLabel);
 
-    _statusLabel = new QLabel("Статус: test", taskInfoWidget);
+    _statusLabel = new QLabel("", taskInfoWidget);
     taskInfoLayout->addWidget(_statusLabel);
 
-    //this button must be perform and performAgain if task is already done
-    QPushButton *completeTaskButton = new QPushButton("Выполнить задачу", taskInfoWidget);
-    taskInfoLayout->addWidget(completeTaskButton);
-    connect(completeTaskButton, &QPushButton::clicked, this, &TaskMenu::onCompleteTaskClicked);
+    _completeTaskButton = new QPushButton("Выполнить задачу", taskInfoWidget);
+    taskInfoLayout->addWidget(_completeTaskButton);
+    connect(_completeTaskButton, &QPushButton::clicked, this, &TaskMenu::onCompleteTaskClicked);
 
+    QPushButton *applyChangesButton = new QPushButton("Принять изменения", taskInfoWidget);
+    taskInfoLayout->addWidget(applyChangesButton);
+    connect(applyChangesButton, &QPushButton::clicked, this, &TaskMenu::onApplyChangesClicked);
 
     QPushButton *deleteTaskButton = new QPushButton("Удалить задачу", taskInfoWidget);
     taskInfoLayout->addWidget(deleteTaskButton);
@@ -95,10 +99,12 @@ void TaskMenu::displayTaskInfo(Task task)
     if(task.isDone())
     {
         _statusLabel->setText("Статус: Выполнено");
+        _completeTaskButton->setText("Выполнить задачу повторно");
     }
     else
     {
         _statusLabel->setText("Статус: Не выполнено");
+        _completeTaskButton->setText("Выполнить задачу");
     }
 }
 
@@ -112,8 +118,6 @@ void TaskMenu::onNewTaskCreated()
         TaskWidget *taskWidget = new TaskWidget(task, this);
         _taskListLayout->addWidget(taskWidget);
     }
-
-
 }
 
 void TaskMenu::updateTaskList()
@@ -135,10 +139,34 @@ void TaskMenu::updateTaskList()
     }
 }
 
+void TaskMenu::updateTaskInfoMenu()
+{
+    QVector<Task> taskList;
+    taskList = DataBaseConnector::dataBase()->getTaskList();
+    Task task;
+    for(int i = 0; i < taskList.size(); ++i)
+    {
+        task = taskList[i];
+        if(task.getId()==_idOfCurrentTask)
+        {
+            break;
+        }
+    }
+    displayTaskInfo(task);
+}
+
 void TaskMenu::onCompleteTaskClicked()
 {
-    DataBaseConnector::dataBase()->completeTask(_idOfCurrentTask);
+    if(_statusLabel->text()=="Статус: Не выполнено")
+    {
+        DataBaseConnector::dataBase()->completeTask(_idOfCurrentTask);
+    }
+    else
+    {
+        DataBaseConnector::dataBase()->completeTaskAgain(_idOfCurrentTask);
+    }
     updateTaskList();
+    updateTaskInfoMenu();
 }
 
 void TaskMenu::onDeleteTaskClicked()
@@ -151,6 +179,12 @@ void TaskMenu::onNewTaskButtonClicked()
 {
     NewTaskWindow newTaskWindow(this);
     newTaskWindow.exec();
+}
+
+void TaskMenu::onApplyChangesClicked()
+{
+    DataBaseConnector::dataBase()->changeTask(_idOfCurrentTask, _nameLineEdit->text(), _descriptionTextEdit->toPlainText());
+    updateTaskList();
 }
 
 TaskMenu::~TaskMenu()

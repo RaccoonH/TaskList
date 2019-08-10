@@ -16,10 +16,15 @@ public:
 
     void setTask(Task);
     Task getTask(int);
+
     int getCountOfTasks();
+
     void addNewTask(Task);
     void completeTask(int);
+    void completeTaskAgain(int);
     void deleteTask(int);
+    void changeTask(int, QString, QString);
+
     QVector<Task> getTaskList();
 
 private:
